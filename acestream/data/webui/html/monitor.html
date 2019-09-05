@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>P2P Monitor</title>
+    <script src="/webui/javascript/jquery-1.10.2.min.js"></script>
+    <script src="/webui/javascript/p2p-graph.min.js"></script>
+    <script src="/webui/javascript/q.js"></script>
+
+    <style>
+    .node {
+        cursor: pointer;
+    }
+    .node circle {
+        fill: #0aa;
+    }
+    .node:hover circle {
+        fill: #0cc;
+    }
+    .node.fast circle {
+        fill: #0a0;
+    }
+    .node.fast:hover circle {
+        fill: #0c0;
+    }
+    .node.slow circle {
+        fill: #a00;
+    }
+    .node.slow:hover circle {
+        fill: #c00;
+    }
+    .node text {
+        font-size: 12px;
+        font-weight: normal;
+    }
+    .node:hover text {
+        font-weight: bold;
+    }
+    .link text {
+        color: #888;
+        font-size: 12px;
+    }
+    </style>
+
+    <script>
+    var KNOWN_PEERS = {};
+    var CONNECTED_PEERS = {};
+
+    function getNodeData(host, port) {
+        var deferred = Q.defer();
+
+        $.ajax({
+            url: "http://" + host + ":" + port + "/app/monitor",
+            method: "GET",
+            dataType: "json",
+            timeout: 10000,
+            success: function(response, textStatus, xhr) {
+                deferred.resolve(response);
+            },
+            error: function(xhr, textStatus, error) {
+                deferred.reject("request failed");
+            }
+        });
+
+        return deferred.promise;
+    }
+
+    function formatRate(rate) {
+        return Math.ceil(rate / 1024.0);
+    }
+
+    function updatePeers() {
+        var promises = [];
+
+        // promises.push(getNodeData("127.0.0.1", 8621));
+        promises.push(getNodeData("127.0.0.1", 6001));
+        promises.push(getNodeData("127.0.0.1", 6002));
+        promises.push(getNodeData("127.0.0.1", 6003));
+        promises.push(getNodeData("127.0.0.1", 6004));
+        promises.push(getNodeData("127.0.0.1", 6005));
+        promises.push(getNodeData("127.0.0.1", 6006));
+
+        Q.allSettled(promises)
+        .then(function(results) {
+            for(var id in KNOWN_PEERS) {
+                KNOWN_PEERS[id] = 0;
+            }
+
+            results.forEach(function (result, index) {
+                if (result.state === "fulfilled") {
+                    var myPeerId = result.value.peer_id;
+                    var myPort = result.value.my_port;
+                    var myIp = '127.0.0.1';
+
+                    if(!myPeerId) {
+                        return;
+                    }
+
+                    if(KNOWN_PEERS[myPeerId] === undefined) {
+                        console.log("new peer", myPeerId);
+                        var name = myIp + ":" + myPort + ":" + myPeerId;
+
+                        graph.add({
+                            id: myPeerId,
+                            name: name,
+                        });
+                    }
+                    KNOWN_PEERS[myPeerId] = 1;
+
+                    var age = -1;
+                    var nodeClass;
+                    if(result.value.transport_stats.real.lsp == -1) {
+                        nodeClass = 'unknown';
+                    }
+                    else {
+                        age = result.value.transport_stats.real.lsp - result.value.transport_stats.real.my_last;
+                        if(age > 2) {
+                            nodeClass = 'slow';
+                        }
+                        else {
+                            nodeClass = 'fast';
+                        }
+                    }
+                    graph.updateNode(myPeerId, nodeClass, [
+                        'sd: ' + result.value.distance_from_source,
+                        'age: ' + age
+                        ]);
+
+                    if(CONNECTED_PEERS[myPeerId] === undefined) {
+                        CONNECTED_PEERS[myPeerId] = {};
+                    }
+
+                    for(var id in CONNECTED_PEERS[myPeerId]) {
+                        CONNECTED_PEERS[myPeerId][id] = 0;
+                    }
+
+                    result.value.connected_peers.forEach(function(peer) {
+                        if(!peer.id) {
+                            return;
+                        }
+
+                        if(KNOWN_PEERS[peer.id] === undefined) {
+                            console.log("new peer", peer.id);
+                            var name = "";
+                            if(peer.ip) {
+                                name = peer.ip + ":" + peer.external_port + ":";
+                            }
+                            name += peer.id;
+                            graph.add({
+                                id: peer.id,
+                                name: name,
+                            });
+                        }
+                        KNOWN_PEERS[peer.id] = 1;
+
+                        if(CONNECTED_PEERS[myPeerId][peer.id] === undefined) {
+                            graph.connect(myPeerId, peer.id);
+                        }
+                        CONNECTED_PEERS[myPeerId][peer.id] = 1;
+
+                        try {
+                            graph.updateLinkById(myPeerId, peer.id, [
+                                'd: ' + formatRate(peer.downrate),
+                                'u: ' + formatRate(peer.uprate),
+                                'dd: ' + formatRate(peer.dedicated_download_rate),
+                                'cd: ' + formatRate(peer.channel_download_rate),
+                                ]);
+                        }
+                        catch(e) {
+                            console.log('failed to get link: ' + e);
+                        }
+                    });
+
+                    var toDisconnect = [];
+                    for(var id in CONNECTED_PEERS[myPeerId]) {
+                        if(CONNECTED_PEERS[myPeerId][id] == 0) {
+                            toDisconnect.push(id);
+                        }
+                    }
+
+                    toDisconnect.forEach(function(id) {
+                        console.log("disconnect: from=" + myPeerId + " to=" + id);
+                        try {
+                            graph.disconnect(myPeerId, id);
+                        }
+                        catch(e) {}
+                        delete CONNECTED_PEERS[myPeerId][id];
+                    })
+                }
+                else {
+                    var reason = result.reason;
+                }
+            });
+
+            var toRemove = [];
+            for(var id in KNOWN_PEERS) {
+                if(KNOWN_PEERS[id] == 0) {
+                    toRemove.push(id);
+                }
+            }
+
+            toRemove.forEach(function(id) {
+                console.log("remove peer", id);
+
+                if(CONNECTED_PEERS[id]) {
+                    var toDisconnect = [];
+                    for(var otherId in CONNECTED_PEERS[id]) {
+                        toDisconnect.push(otherId);
+                    }
+
+                    toDisconnect.forEach(function(otherId) {
+                        console.log("disconnect: from=" + id + " to=" + otherId);
+                        try {
+                            graph.disconnect(id, otherId);
+                        }
+                        catch(e) {
+                            console.log("failed to disconnect: " + e);
+                        }
+                        delete CONNECTED_PEERS[id][otherId];
+                    })
+                }
+
+                try {
+                    graph.remove(id);
+                }
+                catch(e) {}
+                delete KNOWN_PEERS[id];
+            })
+
+        });
+    }
+
+    </script>
+</head>
+<body>
+
+<div id="p2p-graph"></div>
+
+<script>
+var graph = new P2PGraph('#p2p-graph');
+
+updatePeers();
+setInterval(updatePeers, 5000);
+</script>
+</body>
+</html>
