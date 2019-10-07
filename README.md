@@ -2,6 +2,14 @@
 
 acestream & search engines in docker container turns it into iptv service provided both m3u playlist and live streams.
 
+## Build:
+
+```
+git clone https://github.com/vstavrinov/acestream-docker.git
+cd acestream-docker
+docker build -t acestream .
+```
+
 ## Usage:
 
 ```
@@ -26,7 +34,7 @@ vlc http://localhost:8000/search.m3u
 ```
 
 You can use any player you prefer and  domain where to run docker container.
-See available options:
+See more available options:
 
 ```
 curl http://localhost:8000/search.m3u?help
