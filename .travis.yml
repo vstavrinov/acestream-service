@@ -1,0 +1,22 @@
+language: python
+dist: bionic
+matrix:
+  include:
+  - python: '3.7'
+before_install:
+- sudo rm /etc/apt/apt.conf.d/99-travis-apt-proxy
+- sudo apt-get update
+- sudo apt-get install -y --no-install-recommends python-apsw
+- pip install pytest-cov pytest-flake8 codecov
+install:
+- pip install .
+script:
+- python -m pytest --cache-clear --cov=. --flake8
+deploy:
+  provider: pypi
+  user: __token__
+  password:
+    secure: j6UIFVajVEABGNwgWO0EuGzK7WRHNejyGNFQj6UWB0Og0YzpOloMIHYla1i4S4xWWMW62+61Vsu6tO3LTy7iAx3LRxAQrK1QERalCrItPgJ6ppNs4DJmKwxtNChY4evz+/nv30ygHI+xGSqUtCh6UB0vjmLe2eO4jvuykBUW6dEqIEEzRXLQzVgrZjAQqCzAwHPt0uLpKijDmdtHKbfQYeTVZ0GHYf5JP1ic8A+cbcpus+7TeySlyd/V3zgkAJeK9Dg2Rww6c/brqn8TTp0hx5uA1sdI10auDcOdJylg2tLNLbNGJ/ct3NljILsL59FW/v968YJOXa36toQ1SYfYCcZ63Hl6fTkWY/OpisFItrqNAmNuOhGSzeD4sRx/4dmtaK2BBaeeEDy0JRxYezEHWotQUYlU+jHD1v7b++jOJ+VxLlEt9MGqpNWY5vi+NAHST0F/rfljryjnW+26CTH8Ea9YXuWXyzvu+DlXz4j5YF/oh+nwefMOIl4I7SqCxcBOAN41FZefagM03scVbbRpXkjv16ck0ECCU7ma0eyg4SByhUUwwnZBEgO56AM6/1X90E12GUUHZtvsxSeij40/uBiAPEfa04bmh9/Rlf0arKwtgKDTUW5bkAECLaeuixRdru5DbGXIb5e7Gd75ThlDY6vH88BDOy1tAS8ZJJBvCak=
+  on:
+    tags: true
+    python: 3.7
