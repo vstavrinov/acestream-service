@@ -14,7 +14,7 @@ RUN apt-get update &&                                                           
     unzip acestream_search.zip;                                                                        \
     cd acestream_search-master;                                                                        \
     python setup.py install;                                                                           \
-    cd -;                                                                                             \
+    cd -;                                                                                              \
     usermod -d /srv/acestream www-data;                                                                \
     chown -R www-data ./ /etc/nginx /var/cache/nginx
 USER www-data
