@@ -12,11 +12,11 @@ before_install:
   - sudo rm /etc/apt/apt.conf.d/99-travis-apt-proxy
   - sudo apt-get update
   - sudo apt-get install -y --no-install-recommends python-apsw
-  - docker build -t acestream .
+  - docker build -t $DOCKER_USERNAME/acestream .
   - pip install pytest-cov pytest-flake8 codecov
 
 install:
-  - docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 acestream
+  - docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 $DOCKER_USERNAME/acestream
 
 script:
   - python -m pytest --cache-clear --cov=. --flake8
@@ -29,7 +29,7 @@ deploy:
     on:
       tags: true
   - provider: script
-    script: bash -c 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && docker push "$DOCKER_USERNAME"/acestream'
+    script: bash -c "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin && docker push $DOCKER_USERNAME/acestream"
     on:
       tags: true
 
