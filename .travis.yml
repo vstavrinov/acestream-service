@@ -22,13 +22,14 @@ script:
   - python -m pytest --cache-clear --cov=. --flake8
 
 deploy:
-  provider: heroku
-  app: acestream
-  api-key:
-    secure: McvoVT2XoruazbIjFhmIlel/lgIQZ/1+o6HRBQ/jsTjeGRRy1zhx/TohhBSFnlatcGPuUc0V1YRauV8VzPHzvLhJmeQUT3wQGZsD1uU96Dw0HDGIXoQJtgyzvUt63/9jhsuuAihrP9GZAR4/yld8tOMi1mfA1dY/O44ZBBsRcd+anXdRDq5GTL3M2HyuQ7BftGcNjjtTYTeTV5VsMo91PLEOWDtxCbhHRLCNS7JHN3kWg/w0Rc5fjXgCNtJi4s+tTq+gGv5fK6Cct4nVbNygql7zcPixVX/sudH7OF/9v6ELJRfjK3ri3AoV9OM1soUci7i5NGo3ktH0lP6jbBmnXbF7aQpAUSJGpo9lEukjVNzemG3EVE7gUZlaIm/KjpeyGjUFks8pwMgYbbqjIr9lONI1ymyAvUCE/KRtKT70QOPLMHvrynQMo8P6URFPe8DHv8q/x9GcdyXkR54theLFG3XdRzNo/R5y1l1fGGdm5qshfWcfgM78hETDnVsGp2Tm0WY4BJiCu9lQEHIRNREWskBgENclqW0yVbzuo6QYZZ0OcZz011SJbr4NaOqOG/nwDJRYTSDgx3DX7AfXw8K8HAjHidwTkfiaLruijxqSdaybt426/qfvUHLszVn1iuuZCDZn75cAR2pOa2/nSARKBENMHIBoribQQDyaZEwYLT0=
-  on:
-    tags: true
-  provider: script
+  - provider: heroku
+    app: acestream
+    api-key:
+      secure: McvoVT2XoruazbIjFhmIlel/lgIQZ/1+o6HRBQ/jsTjeGRRy1zhx/TohhBSFnlatcGPuUc0V1YRauV8VzPHzvLhJmeQUT3wQGZsD1uU96Dw0HDGIXoQJtgyzvUt63/9jhsuuAihrP9GZAR4/yld8tOMi1mfA1dY/O44ZBBsRcd+anXdRDq5GTL3M2HyuQ7BftGcNjjtTYTeTV5VsMo91PLEOWDtxCbhHRLCNS7JHN3kWg/w0Rc5fjXgCNtJi4s+tTq+gGv5fK6Cct4nVbNygql7zcPixVX/sudH7OF/9v6ELJRfjK3ri3AoV9OM1soUci7i5NGo3ktH0lP6jbBmnXbF7aQpAUSJGpo9lEukjVNzemG3EVE7gUZlaIm/KjpeyGjUFks8pwMgYbbqjIr9lONI1ymyAvUCE/KRtKT70QOPLMHvrynQMo8P6URFPe8DHv8q/x9GcdyXkR54theLFG3XdRzNo/R5y1l1fGGdm5qshfWcfgM78hETDnVsGp2Tm0WY4BJiCu9lQEHIRNREWskBgENclqW0yVbzuo6QYZZ0OcZz011SJbr4NaOqOG/nwDJRYTSDgx3DX7AfXw8K8HAjHidwTkfiaLruijxqSdaybt426/qfvUHLszVn1iuuZCDZn75cAR2pOa2/nSARKBENMHIBoribQQDyaZEwYLT0=
+    on:
+      tags: true
+  - provider: script
     script: bash -c 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && docker push "$DOCKER_USERNAME"/acestream'
     on:
       tags: true
+
