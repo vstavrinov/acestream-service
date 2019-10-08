@@ -32,7 +32,6 @@ deploy:
     on:
       tags: true
     script: >
-      bash -c '
-      echo $DOCKER_PASSWORD |
+      bash -c "echo $DOCKER_PASSWORD |
       docker login -u $DOCKER_USERNAME --password-stdin &&
-      docker push $DOCKER_USERNAME/$REPO'
+      docker push $DOCKER_USERNAME/$REPO"
