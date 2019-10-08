@@ -24,13 +24,8 @@ deploy:
     app: $REPO
     api-key:
       secure: $HEROKU_API_KEY
-    on:
-      tags: true
   - provider: script
     script: >
-      bash -c '
-      echo $DOCKER_PASSWORD |
-      docker login -u $DOCKER_USERNAME --password-stdin &&
-      docker push $DOCKER_USERNAME/$REPO'
-    on:
-      tags: true
+      bash -c 'echo $DOCKER_PASSWORD |
+               docker login -u $DOCKER_USERNAME --password-stdin &&
+               docker push $DOCKER_USERNAME/$REPO'
