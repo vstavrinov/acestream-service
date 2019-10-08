@@ -1,9 +1,10 @@
 language: python
 
 env:
-  - PORT=7000
-  - port=8000
-  - REPO=acestream
+  global:
+    - PORT=7000
+    - port=8000
+    - REPO=acestream
 
 services:
   - docker
