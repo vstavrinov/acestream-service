@@ -24,6 +24,3 @@ script:
 deploy:
   - provider: script
     script: ./deploy.sh
-    on:
-      branch: master
-      tags: true
