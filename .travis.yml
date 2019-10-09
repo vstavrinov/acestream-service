@@ -22,16 +22,7 @@ script:
   - python -m pytest --cache-clear --cov=. --flake8
 
 deploy:
-  - provider: heroku
-    on:
-      branch: master
-    app: $REPO
-    api-key:
-      secure: $HEROKU_API_KEY
   - provider: script
     on:
-      tags: true
-    script: >-
-      bash -c 'echo $DOCKER_PASSWORD |
-      docker login -u $DOCKER_USERNAME --password-stdin &&
-      docker push $DOCKER_USERNAME/$REPO'
+      branch: master
+    script: deploy.sh
