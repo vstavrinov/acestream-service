@@ -18,6 +18,7 @@ if [ "$TRAVIS_TAG" = "" ]; then
     -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
     -H "Authorization: $(echo -n $HEROKU_IDENTITY:$HEROKU_API_KEY | base64)"
 else
+    docker tag $DOCKER_USERNAME/$REPO $DOCKER_USERNAME/$REPO:$TRAVIS_TAG &&
     echo $DOCKER_PASSWORD |
     docker login -u $DOCKER_USERNAME --password-stdin &&
     docker push $DOCKER_USERNAME/$REPO:$TRAVIS_TAG
