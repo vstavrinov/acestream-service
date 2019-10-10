@@ -30,7 +30,7 @@ class TestQuery(unittest.TestCase):
 
     def test_epg(self):
         args = 'query=' + quote(channel)
-        args += 'name=' + quote(channel)
+        args += '&name=' + quote(channel)
         args += '&show_epg=1'
         self.assertIsNotNone(re.match('#EXTINF:-1 tvg-id="[0-9]+",' + channel +
                              '.*\n.*/ace/manifest.m3u8\\?infohash=[0-9a-f]+',
