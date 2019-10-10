@@ -20,7 +20,7 @@ install:
 
 script:
   - python -m pytest --cache-clear --cov=. --flake8
-  - git clean -dxff
+  - git clean -fd
 
 deploy:
   - provider: script
