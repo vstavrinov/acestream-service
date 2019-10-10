@@ -12,7 +12,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t $DOCKER_USERNAME/$REPO .
+  - docker build -t $DOCKER_USERNAME/$REPO:$TRAVIS_TAG .
   - pip install pytest-cov pytest-flake8 codecov
 
 install:
