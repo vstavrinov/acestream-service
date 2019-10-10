@@ -20,5 +20,5 @@ if [ "$TRAVIS_TAG" = "" ]; then
 else
     echo $DOCKER_PASSWORD |
     docker login -u $DOCKER_USERNAME --password-stdin &&
-    docker push $DOCKER_USERNAME/$REPO
+    docker push $DOCKER_USERNAME/$REPO:$TRAVIS_TAG
 fi
