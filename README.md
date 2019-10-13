@@ -7,7 +7,7 @@ acestream & search engines two in one in docker container turns it into iptv ser
 ```
 git clone https://github.com/vstavrinov/acestream-service.git
 cd acestream-service
-docker build -t acestream .
+docker build -t acestream-service .
 ```
 
 ## Usage:
@@ -26,12 +26,12 @@ host-port is used to rewrite standard acestream engine port 6868 in response to 
 For example:
 
 ```
-docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 acestream
+docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 acestream-service
 ```
 Or you can omit build phase and pull and run it directly from repository:
 
 ```
-docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 docker pull vstavrinov/acestream
+docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 docker pull vstavrinov/acestream-service
 ```
 
 Finally you can watch tv:
