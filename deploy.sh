@@ -10,7 +10,7 @@ if [ "$TRAVIS_TAG" = "" ]; then
       "updates": [
         {
           "type": "web",
-          "docker_image": "'$(docker inspect $DOCKER_USERNAME/$HEROKU_REPO --format={{.Id}})'"
+          "docker_image": "'$(docker inspect registry.heroku.com/$HEROKU_REPO/web --format={{.Id}})'"
         }
       ]
     }' \
