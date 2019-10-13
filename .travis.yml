@@ -6,17 +6,18 @@ env:
   global:
     - PORT=7000
     - port=8000
-    - REPO=acestream
+    - DOCKER_REPO=acestream-service
+    - HEROKU_REPO=acestream
 
 services:
   - docker
 
 before_install:
-  - docker build -t $DOCKER_USERNAME/$REPO .
+  - docker build -t $DOCKER_USERNAME/$DOCKER_REPO .
   - pip install pytest-cov pytest-flake8 codecov
 
 install:
-  - docker run -d -e PORT=$PORT -e port=$port -p $port:$PORT $DOCKER_USERNAME/$REPO
+  - docker run -d -e PORT=$PORT -e port=$port -p $port:$PORT $DOCKER_USERNAME/$DOCKER_REPO
 
 script:
   - python -m pytest --cache-clear --cov=. --flake8
