@@ -4,8 +4,6 @@ import re
 import sys
 import unittest
 
-from search import app
-
 # workaround for python2 vs python3 compatibility
 if sys.version_info[0] > 2:
     from urllib.request import quote
