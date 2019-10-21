@@ -7,10 +7,12 @@ import unittest
 # workaround for python2 vs python3 compatibility
 if sys.version_info[0] > 2:
     from urllib.request import quote
+
     def u_code(string):
         return string
 else:
     from urllib import quote
+
     def u_code(string):
         return string.encode('utf8')
 
