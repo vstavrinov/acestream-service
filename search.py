@@ -24,7 +24,7 @@ def get_args():
     return args
 
 
-@app.route('/search.m3u')
+@app.route('/search.m3u8')
 def main():
     args = get_args()
     # return str(args)
@@ -36,17 +36,8 @@ def main():
         content_type = 'application/x-mpegURL'
 
     def generate():
-        for chunk in engine(args):
-            if chunk:
-                for page in chunk:
-                    if page:
-                        yield page + '\n'
-
-    def xml_generate():
-        yield '<?xml version="1.0" encoding="utf-8" ?>\n<tv>\n'
-        for chunk in generate():
-            yield chunk
-        yield '</tv>\n'
+        for page in engine(args):
+            yield page + '\n'
 
     if 'version' in args:
         return Response(__version__ + '\n', content_type='text/plain')
@@ -54,8 +45,6 @@ def main():
         return Response(args.help, content_type='text/plain')
     if 'usage' in args:
         return Response(args.usage, content_type='text/plain')
-    if args.xml_epg:
-        return Response(xml_generate(), content_type=content_type)
     return Response(generate(), content_type=content_type)
 
 
