@@ -1,7 +1,7 @@
 import sys
 from distutils.util import split_quoted
 
-from flask import Flask, request, Response
+from flask import Flask, request, Response, redirect
 
 from acestream_search.acestream_search import main as engine, get_options, __version__
 
@@ -45,6 +45,11 @@ def main():
         return Response(args.help, content_type='text/plain')
     if 'usage' in args:
         return Response(args.usage, content_type='text/plain')
+    if args.url:
+        result = ''
+        for item in generate():
+            result += item
+        return redirect(result.strip('\n'))
     return Response(generate(), content_type=content_type)
 
 
