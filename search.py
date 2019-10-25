@@ -1,7 +1,7 @@
 import sys
 from distutils.util import split_quoted
 
-from flask import Flask, request, Response, redirect
+from flask import Flask, request, Response
 
 from acestream_search.acestream_search import main as engine, get_options, __version__
 
