@@ -50,7 +50,11 @@ def main():
         result = ''
         for item in generate():
             result += item
-        return redirect(result.strip('\n').replace('http://localhost:6878/', request.url_root))
+        redirect_url = result.strip('\n').replace('http://localhost:6878/', request.url_root)
+        response = Response('', content_type='')
+        response.headers['Location'] = redirect_url
+        response.status_code = 302
+        return response
     return Response(generate(), content_type=content_type)
 
 
