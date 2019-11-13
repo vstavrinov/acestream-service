@@ -16,7 +16,8 @@ RUN apt-get update &&                                                           
     python setup.py install;                                                                           \
     cd -;                                                                                              \
     usermod -d /srv/acestream www-data;                                                                \
-    chown -R www-data ./ /etc/nginx /var/cache/nginx
+    chown -R www-data ./ /etc/nginx /var/cache/nginx;                                                  \
+    ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 USER www-data
 CMD sed -i -e "s/PORT/$PORT/" -e "s/port/${port:=80}/" /etc/nginx/conf.d/default.conf;        \
     chmod 600 /etc/nginx/conf.d/default.conf;                                                 \
