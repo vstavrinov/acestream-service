@@ -20,7 +20,7 @@ install:
   - docker run -d -e PORT=$PORT -e port=$port -p $port:$PORT $DOCKER_USERNAME/$DOCKER_REPO
 
 script:
-  - sleep 5; python -m pytest
+  - python -m pytest
   - git clean -fd
 
 deploy:
