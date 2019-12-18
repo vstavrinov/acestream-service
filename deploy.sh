@@ -5,7 +5,7 @@ echo Deploy to heroku
 echo "
 acestream $ACESTREAM_IDENTITY $ACESTREAM_API_KEY
 cak $CAK_IDENTITY $CAK_API_KEY
-buf $BUF_IDENTITY $BOV_API_KEY
+buf $BUF_IDENTITY $BUF_API_KEY
 " |
 while read HEROKU_REPO HEROKU_IDENTITY HEROKU_API_KEY; do
     if [ -n "$HEROKU_REPO" ]; then
