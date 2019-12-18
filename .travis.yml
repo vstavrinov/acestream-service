@@ -7,7 +7,6 @@ env:
     - PORT=7000
     - port=8000
     - DOCKER_REPO=acestream-service
-    - HEROKU_REPO=acestream
 
 services:
   - docker
