@@ -13,11 +13,12 @@ docker build -t acestream-service .
 ## Usage:
 
 ```
-docker run -d -e PORT=service-port -e port=host-port -p container-port:service-port acestream-image
+docker run -d -e PORT=<service-port> -e port=<host-port> -p <container-port>:<service-port> <acestream-image>
 ```
 
 - service-port is port of service inside container.
-- host-port is either external port forwarded to docker-port or docker-port itself exposed outside host.
+- container-port is port listening by docker container  proxied to service-port
+- host-port is either external port forwarded to docker-port or container-port itself exposed outside host.
 - acestream-image is either docker image You build on your own or those pulled from repository.
 
 host-port is used to rewrite standard acestream engine port 6868 in response to external port to make streams available from outside of container in case for example when docker container is running on the cloud. By default host-port is set to 80. If this is Your case, you can omit -e port=host-port option. But if make requests from the host running docker container, i.e. localhost,  You must set host equal to container-port.
@@ -31,7 +32,7 @@ docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 acestream-service
 Or you can omit build phase and pull and run it directly from repository:
 
 ```
-docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 docker pull vstavrinov/acestream-service
+docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 docker vstavrinov/acestream-service
 ```
 
 Finally you can watch tv:
