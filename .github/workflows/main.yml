@@ -1,0 +1,38 @@
+name: main
+
+on: [workflow_dispatch, push]
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_REPO: acestream-service
+  PORT: 7000
+  entry: 8000
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - name: build
+        run: docker build -t $DOCKER_USERNAME/$DOCKER_REPO .
+      - name: install
+        run: pip install pytest-cov pytest-flake8 codecov
+      - name: run
+        run: docker run -d -e PORT=$PORT -p $entry:$PORT $DOCKER_USERNAME/$DOCKER_REPO
+      - name: sleep
+        run: sleep 4
+      - name: test
+        run: python -m pytest
+      - name: deploy
+        env:
+          BUF_API_KEY: ${{ secrets.BUF_API_KEY }}
+          BUF_IDENTITY: ${{ secrets.BUF_IDENTITY }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          ACESTREAM_API_KEY: ${{ secrets.ACESTREAM_API_KEY }}
+          ACESTREAM_IDENTITY: ${{ secrets.ACESTREAM_IDENTITY }}
+          CAK_API_KEY: ${{ secrets.CAK_API_KEY }}
+          CAK_IDENTITY: ${{ secrets.CAK_IDENTITY }}
+        run: ./deploy.sh
