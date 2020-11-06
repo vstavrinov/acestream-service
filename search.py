@@ -23,6 +23,7 @@ def get_args():
     args = get_options(opts)
     return args
 
+
 # Use two routing rules of Your choice where playlist extension does matter.
 @app.route('/search.m3u')
 @app.route('/search.m3u8')

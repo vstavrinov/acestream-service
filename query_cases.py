@@ -52,7 +52,7 @@ class TestCases(unittest.TestCase):
     def test_json(self):
         args = 'query=' + quote(channel)
         args += '&json=1'
-        item = json.loads(self.probe(args), encoding='utf8')[0]
+        item = json.loads(self.probe(args))[0]
         self.assertTrue(channel in u_code(item['name']) and
                         re.match('[0-9a-f]+', item['infohash']))
 
