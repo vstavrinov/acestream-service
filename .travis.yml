@@ -5,7 +5,7 @@ language: python
 env:
   global:
     - PORT=7000
-    - port=8000
+    - entry=8000
     - DOCKER_REPO=acestream-service
 
 services:
@@ -16,7 +16,7 @@ before_install:
   - pip install pytest-cov pytest-flake8 codecov
 
 install:
-  - docker run -d -e PORT=$PORT -e port=$port -p $port:$PORT $DOCKER_USERNAME/$DOCKER_REPO
+  - docker run -d -e PORT=$PORT -e entry=$entry -p $entry:$PORT $DOCKER_USERNAME/$DOCKER_REPO
 
 script:
   - sleep 2; python -m pytest
