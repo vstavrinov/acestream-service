@@ -1,6 +1,6 @@
 name: main
 
-on: [workflow_dispatch, push]
+on: ["workflow_dispatch", "push"]
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -21,7 +21,7 @@ jobs:
       - name: install
         run: pip install pytest-cov pytest-flake8 codecov
       - name: run
-        run: docker run -d -e PORT=$PORT -p $ENTRY:$PORT $DOCKER_USERNAME/$DOCKER_REPO
+        run: docker run -d -e PORT=$PORT -e ENTRY=$ENTRY -p $ENTRY:$PORT $DOCKER_USERNAME/$DOCKER_REPO
       - name: sleep
         run: sleep 4
       - name: test
@@ -36,3 +36,16 @@ jobs:
           CAK_API_KEY: ${{ secrets.CAK_API_KEY }}
           CAK_IDENTITY: ${{ secrets.CAK_IDENTITY }}
         run: ./deploy.sh
+      - name: Start SSH via Ngrok
+        if: ${{ failure() }}
+        run: curl -sL https://gist.githubusercontent.com/retyui/7115bb6acf151351a143ec8f96a7c561/raw/7099b9db76729dc5761da72aa8525f632d8875c9/debug-github-actions.sh | bash
+        env:
+          # After sign up on the https://ngrok.com/
+          # You can find this token here: https://dashboard.ngrok.com/get-started/setup
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+
+          # This password you will use when authorizing via SSH
+          USER_PASS: ${{ secrets.USER_PASS }}
+      - name: Don't kill instace
+        if: ${{ failure() }}
+        run: sleep 1h  # Prevent to killing instance after failure
