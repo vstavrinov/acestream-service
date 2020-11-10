@@ -19,7 +19,7 @@ RUN apt-get update &&                                                           
     chown -R www-data ./ /etc/nginx /var/cache/nginx;                                                  \
     ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 USER www-data
-CMD sed -i -e "s/PORT/$PORT/" -e "s/entry/${entry:=80}/" /etc/nginx/conf.d/default.conf;         \
+CMD sed -i -e "s/PORT/$PORT/" -e "s/ENTRY/${ENTRY:=80}/" /etc/nginx/conf.d/default.conf;         \
     chmod 600 /etc/nginx/conf.d/default.conf;                                                  \
     ./acestreamengine --client-console &                                                       \
     uwsgi_python3 -s 127.0.0.1:3031 --wsgi-file search.py --callable app -p 4 --threads 4 -M & \

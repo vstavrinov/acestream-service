@@ -6,7 +6,7 @@ env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   DOCKER_REPO: acestream-service
   PORT: 7000
-  entry: 8000
+  ENTRY: 8000
 
 jobs:
   deploy:
@@ -21,7 +21,7 @@ jobs:
       - name: install
         run: pip install pytest-cov pytest-flake8 codecov
       - name: run
-        run: docker run -d -e PORT=$PORT -p $entry:$PORT $DOCKER_USERNAME/$DOCKER_REPO
+        run: docker run -d -e PORT=$PORT -p $ENTRY:$PORT $DOCKER_USERNAME/$DOCKER_REPO
       - name: sleep
         run: sleep 4
       - name: test
