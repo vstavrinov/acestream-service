@@ -7,7 +7,7 @@ COPY default.conf /etc/nginx/conf.d
 RUN apt-get update &&                                                                                  \
     apt-get install -y --no-install-recommends                                                         \
         libpython2.7 python-pkg-resources net-tools python-apsw curl unzip python3-setuptools          \
-        uwsgi-plugin-python3 python3-flask python3-lxml;                                               \
+        uwsgi uwsgi-plugin-python3 python3-flask python3-lxml;                                         \
     curl http://acestream.org/downloads/linux/acestream_3.1.49_debian_9.9_x86_64.tar.gz |              \
     tar xzf -;                                                                                         \
     curl -kL https://github.com/vstavrinov/acestream_search/archive/master.zip > acestream_search.zip; \
