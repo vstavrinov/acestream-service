@@ -28,13 +28,8 @@ jobs:
         run: python -m pytest
       - name: deploy
         env:
-          BUF_API_KEY: ${{ secrets.BUF_API_KEY }}
-          BUF_IDENTITY: ${{ secrets.BUF_IDENTITY }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          ACESTREAM_API_KEY: ${{ secrets.ACESTREAM_API_KEY }}
-          ACESTREAM_IDENTITY: ${{ secrets.ACESTREAM_IDENTITY }}
-          CAK_API_KEY: ${{ secrets.CAK_API_KEY }}
-          CAK_IDENTITY: ${{ secrets.CAK_IDENTITY }}
+          HEROKU: ${{ secrets.HEROKU }}
         run: ./deploy.sh
       - name: Start SSH via Ngrok
         if: ${{ failure() }}
