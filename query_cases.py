@@ -56,8 +56,11 @@ class TestCases(unittest.TestCase):
         self.assertTrue(channel in u_code(item['name']) and
                         re.match('[0-9a-f]+', item['infohash']))
 
+
+'''
     def test_xml(self):
         args = 'query=' + quote(channel)
         args += '&xml_epg=1'
         self.assertIsNotNone(re.search(' +<channel id="[0-9]+">\\n +<display-name lang="ru">'
                              + channel, self.probe(args)))
+'''
