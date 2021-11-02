@@ -32,7 +32,7 @@ docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 acestream-service
 Or you can omit build phase and pull and run it directly from repository:
 
 ```
-docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 docker vstavrinov/acestream-service
+docker run -d -e PORT=7000 -e port=8000 -p 8000:7000 vstavrinov/acestream-service
 ```
 
 Finally you can watch tv:
