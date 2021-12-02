@@ -12,7 +12,7 @@ RUN apk update &&                                                               
         git://git.alpinelinux.org/aports /srv/aports;                                     \
     abuild-keygen -ani;                                                                   \
     cd /srv/aports/main/openssl;                                                          \
-    sed -e 's/ no-ec2m//' -e 's/^pkgrel=.*/&0/' -i APKBUILD;                              \
+    sed -e 's/no-ec2m//' -e 's/^pkgrel=.*/&0/' -i APKBUILD;                               \
     abuild -F checksum; abuild -P /srv/packages -Fr;                                      \
     apk add /srv/packages/main/x86_64/libcrypto1.1-*.apk;                                 \
     rm /srv/packages/main/x86_64/APKINDEX.tar.gz;                                         \
