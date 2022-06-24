@@ -17,7 +17,7 @@ else:
         return string.encode('utf8')
 
 channel = 'НТВ'
-m3u_re = re.compile('#EXTM3U\n#EXTINF:-1,' + channel +
+m3u_re = re.compile('#EXTM3U\n#EXTINF:-1,[0-9]+\\. ' + channel +
                     '.*\n.*/ace/manifest.m3u8\\?infohash=[0-9a-f]+')
 
 
@@ -45,7 +45,7 @@ class TestCases(unittest.TestCase):
         args = 'query=' + quote(channel)
         args += '&name=' + quote(channel)
         args += '&show_epg=1'
-        self.assertIsNotNone(re.match('#EXTM3U\n#EXTINF:-1 tvg-id="[0-9]+",' + channel +
+        self.assertIsNotNone(re.match('#EXTM3U\n#EXTINF:-1 tvg-id="[0-9]+",[0-9]+\\. ' + channel +
                              '.*\n.*/ace/manifest.m3u8\\?infohash=[0-9a-f]+',
                                       self.probe(args)))
 
