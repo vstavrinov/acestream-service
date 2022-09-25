@@ -48,10 +48,7 @@ def main():
     if 'usage' in args:
         return Response(args.usage, content_type='text/plain')
     if args.url:
-        result = ''
-        for item in generate():
-            result += item
-        redirect_url = result.strip('\n').replace('http://localhost:6878/', request.url_root)
+        redirect_url = next(x for x in generate()).strip('\n')
         response = Response('', content_type='')
         response.headers['Location'] = redirect_url
         response.headers['Content-Type'] = ''

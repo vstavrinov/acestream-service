@@ -19,7 +19,7 @@ jobs:
       - name: build
         run: docker build -t $DOCKER_USERNAME/$DOCKER_REPO .
       - name: install
-        run: pip install pytest-cov pytest-flake8 codecov
+        run: pip install pytest-cov flake8 codecov
       - name: run
         run: docker run -d -e PORT=$PORT -e ENTRY=$ENTRY -p $ENTRY:$PORT $DOCKER_USERNAME/$DOCKER_REPO
       - name: sleep
