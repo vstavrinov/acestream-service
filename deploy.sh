@@ -24,8 +24,8 @@ while read HEROKU_REPO HEROKU_IDENTITY HEROKU_API_KEY; do
     fi
 done
 # Deploy to docker hub new version (tag)
-echo Deploy to docker hub
-docker tag $DOCKER_USERNAME/$DOCKER_REPO $DOCKER_USERNAME/$DOCKER_REPO:$GITHUB_REF_NAME &&
+echo Deploy to docker hub new version ${GITHUB_REF#refs/tags/}
+docker tag $DOCKER_USERNAME/$DOCKER_REPO $DOCKER_USERNAME/$DOCKER_REPO:${GITHUB_REF#refs/tags/} &&
 echo $DOCKER_PASSWORD |
 docker login -u $DOCKER_USERNAME --password-stdin &&
 docker push $DOCKER_USERNAME/$DOCKER_REPO
