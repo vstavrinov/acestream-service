@@ -8,10 +8,6 @@ on:
         description: 'Run the build with tmate debugging enabled'
         required: false
         default: false
-      acestream:
-        description: 'Acestream update indicator'
-        required: false
-
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   DOCKER_REPO: acestream-service
@@ -26,6 +22,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+      - name: GITHUB_REF
+        run: echo GITHUB_REF=$GITHUB_REF github.event.inputs.acestream=${{ github.event.inputs.acestream }}
       - name: build
         run: docker build -t $DOCKER_USERNAME/$DOCKER_REPO .
       - name: install
@@ -43,16 +41,10 @@ jobs:
                 github.event.inputs.debug_enabled ||
                 failure() }}
         uses: mxschmitt/action-tmate@v3
-      - name: tag
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        env:
-          TAG: {{ github.ref_name }}
-      - name: sha
-        if: ${{ github.event.inputs.acestream }}
-        env:
-          TAG: {{ github.event.inputs.acestream }}
       - name: deploy
+        if: ${{ startsWith(github.ref, 'refs/tags/')
         env:
+          TAG: ${{ github.ref_name }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           HEROKU: ${{ secrets.HEROKU }}
         run: ./deploy.sh
