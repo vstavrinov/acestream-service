@@ -1,6 +1,16 @@
 name: main
 
-on: ["workflow_dispatch", "push"]
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        description: 'Run the build with tmate debugging enabled'
+        required: false
+        default: false
+      acestream:
+        description: 'Acestream update indicator'
+        required: false
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -25,22 +35,24 @@ jobs:
       - name: sleep
         run: sleep 4
       - name: test
-        run: python -m pytest
+        run: |
+          python -m pytest
+          flake8 *.py
+      - name: Setup tmate session
+        if: ${{ github.event_name == 'workflow_dispatch' &&
+                github.event.inputs.debug_enabled ||
+                failure() }}
+        uses: mxschmitt/action-tmate@v3
+      - name: tag
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        env:
+          TAG: {{ github.ref_name }}
+      - name: sha
+        if: ${{ github.event.inputs.acestream }}
+        env:
+          TAG: {{ github.event.inputs.acestream }}
       - name: deploy
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           HEROKU: ${{ secrets.HEROKU }}
         run: ./deploy.sh
-      - name: Start SSH via Ngrok
-        if: ${{ failure() }}
-        run: curl -sL https://gist.githubusercontent.com/retyui/7115bb6acf151351a143ec8f96a7c561/raw/7099b9db76729dc5761da72aa8525f632d8875c9/debug-github-actions.sh | bash
-        env:
-          # After sign up on the https://ngrok.com/
-          # You can find this token here: https://dashboard.ngrok.com/get-started/setup
-          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
-
-          # This password you will use when authorizing via SSH
-          USER_PASS: ${{ secrets.USER_PASS }}
-      - name: Don't kill instace
-        if: ${{ failure() }}
-        run: sleep 1h  # Prevent to killing instance after failure
