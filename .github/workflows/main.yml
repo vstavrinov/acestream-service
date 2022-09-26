@@ -22,8 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - name: GITHUB_REF
-        run: echo GITHUB_REF=$GITHUB_REF github.event.inputs.acestream=${{ github.event.inputs.acestream }}
       - name: build
         run: docker build -t $DOCKER_USERNAME/$DOCKER_REPO .
       - name: install
