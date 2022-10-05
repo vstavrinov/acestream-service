@@ -32,7 +32,7 @@ class TestCases(unittest.TestCase):
         self.assertIsNotNone(m3u_re.match(self.probe(args)))
 
     def test_name(self):
-        args += 'name=' + quote(channel)
+        args = 'name=' + quote(channel)
         self.assertIsNotNone(m3u_re.match(self.probe(args)))
 
     def test_group(self):
