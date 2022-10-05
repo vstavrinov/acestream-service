@@ -32,8 +32,7 @@ class TestCases(unittest.TestCase):
         self.assertIsNotNone(m3u_re.match(self.probe(args)))
 
     def test_name(self):
-        args = 'query=' + quote(channel)
-        args += '&name=' + quote(channel)
+        args += 'name=' + quote(channel)
         self.assertIsNotNone(m3u_re.match(self.probe(args)))
 
     def test_group(self):
@@ -52,7 +51,7 @@ class TestCases(unittest.TestCase):
     def test_json(self):
         args = 'query=' + quote(channel)
         args += '&json=1'
-        item = json.loads(self.probe(args))[0]
+        item = json.loads(self.probe(args))[0]['items'][0]
         self.assertTrue(channel in u_code(item['name']) and
                         re.match('[0-9a-f]+', item['infohash']))
 
