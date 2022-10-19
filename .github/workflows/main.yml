@@ -25,6 +25,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 300
       - uses: actions/setup-python@v2
       - name: build
         run: docker build -t $DOCKER_USERNAME/$DOCKER_REPO .
