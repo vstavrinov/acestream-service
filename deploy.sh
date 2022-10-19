@@ -1,14 +1,14 @@
-#!/usr/bin/env bash
+#!/bin/bash -e
 
 # Deploy to heroku and Cloud Function on commits of master branch 
 echo Deploy to heroku
 echo "$HEROKU" |
 while read HEROKU_REPO HEROKU_IDENTITY HEROKU_API_KEY; do
     if [ -n "$HEROKU_REPO" ]; then
-        docker tag $DOCKER_USERNAME/$DOCKER_REPO registry.heroku.com/$HEROKU_REPO/web &&
+        docker tag $DOCKER_USERNAME/$DOCKER_REPO registry.heroku.com/$HEROKU_REPO/web
         echo $HEROKU_API_KEY |
-        docker login -u $HEROKU_IDENTITY --password-stdin registry.heroku.com &&
-        docker push registry.heroku.com/$HEROKU_REPO/web &&
+        docker login -u $HEROKU_IDENTITY --password-stdin registry.heroku.com
+        docker push registry.heroku.com/$HEROKU_REPO/web
         curl -n -X PATCH https://api.heroku.com/apps/$HEROKU_REPO/formation \
          -d '{
           "updates": [
@@ -25,7 +25,7 @@ while read HEROKU_REPO HEROKU_IDENTITY HEROKU_API_KEY; do
 done
 # Deploy to docker hub new version (tag)
 echo Deploy to docker hub new version GITHUB_REF=${GITHUB_REF}, TAG=$TAG,  GITHUB_REF_NAME=$GITHUB_REF_NAME
-docker tag $DOCKER_USERNAME/$DOCKER_REPO $DOCKER_USERNAME/$DOCKER_REPO:$TAG &&
+docker tag $DOCKER_USERNAME/$DOCKER_REPO $DOCKER_USERNAME/$DOCKER_REPO:$TAG
 echo $DOCKER_PASSWORD |
-docker login -u $DOCKER_USERNAME --password-stdin &&
+docker login -u $DOCKER_USERNAME --password-stdin
 docker push $DOCKER_USERNAME/$DOCKER_REPO:$TAG
