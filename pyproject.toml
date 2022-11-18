@@ -1,1 +1,6 @@
 [tool.versioningit]
+
+[tool.versioningit.format]
+distance = "{base_version}.{distance}"
+dirty = "{base_version}.{distance}.0"
+distance-dirty = "{base_version}.{distance}.1"
