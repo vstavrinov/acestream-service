@@ -7,6 +7,8 @@ RUN apt-get update;                                          \
     apt-get --yes install nginx;                             \
     apt-get clean;                                           \
     ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime; \
+    ln -sf /dev/stderr /var/log/nginx/error.log;             \
+    ln -sf /dev/stdout /var/log/nginx/access.log;            \
     chown -R ace . /etc/nginx /var/lib/nginx /var/log/nginx; \
     pip install --no-cache-dir gunicorn flask                \
         git+https://github.com/vstavrinov/acestream_search.git
