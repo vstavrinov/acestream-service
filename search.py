@@ -20,6 +20,8 @@ def get_args():
         opts[item] = u_code(request.args[item])
     if 'name' in opts:
         opts['name'] = split_quoted(opts['name'])
+    if not 'query' in opts:
+        opts['query'] = ''
     args = get_options(opts)
     return args
 
