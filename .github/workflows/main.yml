@@ -50,5 +50,4 @@ jobs:
                 github.event.inputs.acestream }}
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          HEROKU: ${{ secrets.HEROKU }}
         run: ./deploy.sh
