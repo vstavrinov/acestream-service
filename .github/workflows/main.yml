@@ -41,8 +41,7 @@ jobs:
           python -m pytest
           flake8 *.py
       - name: Setup tmate session
-        if: ${{ github.event_name == 'workflow_dispatch' &&
-                github.event.inputs.debug_enabled ||
+        if: ${{ inputs.debug_enabled ||
                 failure() }}
         uses: mxschmitt/action-tmate@v3
       - name: deploy
