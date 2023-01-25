@@ -46,7 +46,7 @@ jobs:
                 failure() }}
         uses: mxschmitt/action-tmate@v3
       - name: deploy
-        if: ${{ startsWith(github.ref, 'refs/tags/') }} ||
+        if: ${{ startsWith(github.ref, 'refs/tags/') ||
                 inputs.deploy }}
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
