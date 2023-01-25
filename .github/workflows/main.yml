@@ -8,9 +8,10 @@ on:
         description: 'Run the build with tmate debugging enabled'
         required: false
         type: boolean
-      acestream:
-        description: 'Acestream update indicator'
+      deploy:
+        description: 'Run deploy'
         required: false
+        type: boolean
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -46,7 +47,7 @@ jobs:
         uses: mxschmitt/action-tmate@v3
       - name: deploy
         if: ${{ startsWith(github.ref, 'refs/tags/') }} ||
-                github.event.inputs.acestream }}
+                inputs.deploy }}
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: ./deploy.sh
