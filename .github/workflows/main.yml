@@ -7,7 +7,7 @@ on:
       debug_enabled:
         description: 'Run the build with tmate debugging enabled'
         required: false
-        default: false
+        type: boolean
       acestream:
         description: 'Acestream update indicator'
         required: false
