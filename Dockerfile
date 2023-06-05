@@ -21,7 +21,10 @@ CMD sed -e "s/PORT/${PORT:=80}/"               \
     sed -e "/^user /"d                         \
         -e "/^pid /s%/run/%/srv/ace/%"         \
         -i /etc/nginx/nginx.conf;              \
-    rm -vfr .ACEStream;                        \
-    ./start-engine --client-console &          \
+    mkdir /dev/shm/.ACEStream;                 \
+    ln -s /dev/shm/.ACEStream .ACEStream;      \
+    ./start-engine                             \
+        --client-console                       \
+        --live-cache-type memory &             \
     gunicorn --bind 0.0.0.0:3031 search:app &  \
     /usr/sbin/nginx -g "daemon off;"
