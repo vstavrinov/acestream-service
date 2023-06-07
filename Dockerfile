@@ -6,7 +6,6 @@ USER root
 RUN apt-get update;                                          \
     apt-get --yes install nginx;                             \
     apt-get clean;                                           \
-    ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime; \
     ln -sf /dev/stderr /var/log/nginx/error.log;             \
     ln -sf /dev/stdout /var/log/nginx/access.log;            \
     chown -R ace . /etc/nginx /var/lib/nginx /var/log/nginx; \
@@ -21,8 +20,8 @@ CMD sed -e "s/PORT/${PORT:=80}/"               \
     sed -e "/^user /"d                         \
         -e "/^pid /s%/run/%/srv/ace/%"         \
         -i /etc/nginx/nginx.conf;              \
-    mkdir /dev/shm/.ACEStream;                 \
-    ln -s /dev/shm/.ACEStream .ACEStream;      \
+    mkdir --verbose /dev/shm/.ACEStream;       \
+    ln -v -s /dev/shm/.ACEStream .ACEStream;   \
     ./start-engine                             \
         --client-console                       \
         --live-cache-type memory &             \
