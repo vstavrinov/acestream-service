@@ -22,8 +22,8 @@ CMD sed -e "s/PORT/${PORT:=80}/"               \
         -i /etc/nginx/nginx.conf;              \
     mkdir --verbose /dev/shm/.ACEStream;       \
     ln -v -s /dev/shm/.ACEStream .ACEStream;   \
+    gunicorn --bind 0.0.0.0:3031 search:app &  \
+    /usr/sbin/nginx &                          \
     ./start-engine                             \
         --client-console                       \
-        --live-cache-type memory &             \
-    gunicorn --bind 0.0.0.0:3031 search:app &  \
-    /usr/sbin/nginx -g "daemon off;"
+        --live-cache-type memory
